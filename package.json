@@ -5,5 +5,12 @@
   "main": "index.js",
   "repository": "https://github.com/Jtfinlay/blue-screeps.git",
   "author": "James Finlay <jtfinlay@ualberta.ca>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "grunt": "^1.0.2",
+    "grunt-screeps": "^1.4.0"
+  },
+  "scripts": {
+    "deploy": "grunt screeps"
+  }
 }
