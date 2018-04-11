@@ -1,0 +1,9 @@
+{
+  "name": "blue-screeps",
+  "version": "1.0.0",
+  "description": "A custom AI pack for Screeps.",
+  "main": "index.js",
+  "repository": "https://github.com/Jtfinlay/blue-screeps.git",
+  "author": "James Finlay <jtfinlay@ualberta.ca>",
+  "license": "MIT"
+}
