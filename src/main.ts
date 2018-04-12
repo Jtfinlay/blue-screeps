@@ -3,7 +3,7 @@ import CreepRoles from './creepRole';
 module.exports.loop = () => {
     console.log(`Current game tick is ${Game.time}`);
     for(var name in Game.rooms) {
-        console.log('Room "'+name+'" has '+Game.rooms[name].energyAvailable+' energy');
+        console.log('Room "' + name + '" has ' + Game.rooms[name].energyAvailable + ' energy');
     }
 
     // Automatically delete memory of missing creeps
