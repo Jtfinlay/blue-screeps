@@ -1,13 +1,17 @@
 module.exports = function(grunt) {
-
-    grunt.loadNpmTasks('grunt-screeps');
-
     grunt.initConfig({
+        ts: {
+            default: {
+                tsconfig: './tsconfig.json',
+                flatten: true,
+                expand: true
+            }
+        },
         screeps: {
             options: {
-                email: '<your e-mail>',
-                password: '<your password>',
-                branch: 'master',
+                email: process.env.SCREEPS_EMAIL,
+                password: process.env.SCREEPS_PASSWORD,
+                branch: 'default',
                 ptr: false
             },
             dist: {
@@ -15,4 +19,9 @@ module.exports = function(grunt) {
             }
         }
     });
+
+    grunt.loadNpmTasks('grunt-screeps');
+    grunt.loadNpmTasks('grunt-ts');
+    
+    grunt.registerTask("default", ["ts"]);
 }
