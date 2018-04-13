@@ -13,7 +13,12 @@ class HarvestRoleClass {
     }
 
     public findHarvestSource(creep: CreepModel): Source | null {
-        return creep.room.find(FIND_SOURCES)[0];
+        const sources = creep.room.find(FIND_SOURCES)
+            .filter(source => SourceUtils.hasRoomForCreep(source, creep))
+        if (sources.length <= 0) {
+            return null;
+        }
+        return sources[0];
     }
 
     public gatherEnergy(creep: CreepModel): boolean {

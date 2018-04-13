@@ -1,4 +1,5 @@
 import HarvestRole from '../tasks/Harvest';
+import SourceUtils from '../utils/Source';
 
 export type CreepTaskType = 
     | GatherEnergyTaskType
@@ -22,7 +23,7 @@ export default class CreepModel extends Creep {
     }
 
     public run(): void {
-        if (this.task && !this.canPerformAction(this.task)) {
+        if (this.task && !this.canCompleteTask()) {
             this.wipe();
         }
 
@@ -44,7 +45,7 @@ export default class CreepModel extends Creep {
     public set task(value: CreepTaskType) {
         this.Store.task = value;
         if (value) {
-            this.say(value);
+            // this.say(value);
         }
     }
 
@@ -56,6 +57,10 @@ export default class CreepModel extends Creep {
         this.Store.taskTarget = value;
     }
 
+    public get energyHarvestEfficiency(): number {
+        return 2 * this.body.filter(part => part.type === WORK).length;
+    }
+
     private get Store(): CreepStore {
         return (Memory.creeps[this.prototype.name] as CreepStore);
     }
@@ -63,6 +68,21 @@ export default class CreepModel extends Creep {
     private wipe(): void {
         this.task = null;
         this.taskTarget = null;
+    }
+
+    private canCompleteTask(): boolean {
+        if (!this.canPerformAction(this.task)) {
+            return false;
+        }
+        switch (this.task) {
+            case 'gatherenergy':
+                if (this.taskTarget === null) {
+                    return false;
+                }
+                return SourceUtils.hasRoomForCreep(<Source>Game.getObjectById(this.taskTarget), this);
+            default:
+                return true;
+        }
     }
 
     private canPerformAction(task: CreepTaskType): boolean {
