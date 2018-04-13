@@ -1,21 +1,22 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "rootDir": "src",
-    "outDir": "dist",
-    "lib": ["es6"],
-    "sourceMap": true,
-    "allowJs": true,
-    "strict": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "noImplicitReturns": true,
-    "allowSyntheticDefaultImports": true,
-    "allowUnreachableCode": false
-  },
-  "exclude": [
-    "node_modules",
-    "GruntFile.js"
-  ]
-}
+    "compilerOptions": {
+      "module": "commonjs",
+      "target": "es5",
+      "baseUrl": "src/",
+      "outDir": "dist",
+      "lib": ["es6"],
+      "sourceMap": true,
+      "allowJs": true,
+      "strict": true,
+      "moduleResolution": "node",
+      "experimentalDecorators": true,
+      "noImplicitReturns": true,
+      "allowSyntheticDefaultImports": true,
+      "allowUnreachableCode": false
+    },
+    "exclude": [
+      "node_modules",
+      "rollup.config.js",
+      "dist"
+    ]
+  }

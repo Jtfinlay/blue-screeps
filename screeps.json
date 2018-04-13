@@ -1,0 +1,19 @@
+{
+  "main": {
+    "token": "<placeholder>",
+    "protocol": "https",
+    "hostname": "screeps.com",
+    "port": 443,
+    "path": "/",
+    "branch": "main"
+  },
+  "pserver": {
+    "email": "<placeholder>",
+    "password": "<placeholder>",
+    "protocol": "http",
+    "hostname": "192.168.1.142",
+    "port": 21025,
+    "path": "/",
+    "branch": "main"
+  }
+}
