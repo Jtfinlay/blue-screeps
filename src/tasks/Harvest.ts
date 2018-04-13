@@ -1,6 +1,6 @@
-import StructureUtils from './utils-structure';
-import SourceUtils from './utils-source';
-import CreepModel, { CreepTaskType } from './model-creep';
+import StructureUtils from '../utils/Structure';
+import SourceUtils from '../utils/Source';
+import CreepModel, { CreepTaskType } from '../models/Creep';
 
 class HarvestRoleClass {
 

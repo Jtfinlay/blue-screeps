@@ -8,6 +8,7 @@
   "license": "MIT",
   "scripts": {
     "lint": "tslint \"src/**/*.ts\"",
+    "build": "rollup -c",
     "push-main": "rollup -c --dest main",
     "push-pserver": "rollup -c --dest pserver",
     "test": "echo \"Error: no test specified\" && exit 1",

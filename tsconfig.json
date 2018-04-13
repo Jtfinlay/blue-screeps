@@ -6,7 +6,6 @@
       "outDir": "dist",
       "lib": ["es6"],
       "sourceMap": true,
-      "allowJs": true,
       "strict": true,
       "moduleResolution": "node",
       "experimentalDecorators": true,

@@ -1,4 +1,4 @@
-import HarvestRole from './role-harvest';
+import HarvestRole from '../tasks/Harvest';
 
 export type CreepTaskType = 
     | GatherEnergyTaskType

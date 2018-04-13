@@ -12,17 +12,17 @@ if (i == 0) {
   console.log("No destination specified - code will be compiled but not uploaded");
 } else if (i >= process.argv.length || (cfg = require("./screeps")[process.argv[i]]) == null) {
   throw new Error("Invalid upload destination");
-}
-
-// Replace auth config with env variables, if set.
-if (cfg.email && cfg.password && process.env.SCREEPS_EMAIL && process.env.SCREEPS_PASSWORD) {
-    console.log('Setting email/password from env');
-    cfg.email = process.env.SCREEPS_EMAIL;
-    cfg.password = process.env.SCREEPS_PASSWORD;
-}
-if (cfg.token && process.env.SCREEPS_AUTH) {
-    console.log('Setting auth token from env');
-    cfg.token = process.env.SCREEPS_AUTH;
+} else {
+    // Replace auth config with env variables, if set.
+    if (cfg.email && cfg.password && process.env.SCREEPS_EMAIL && process.env.SCREEPS_PASSWORD) {
+        console.log('Setting email/password from env');
+        cfg.email = process.env.SCREEPS_EMAIL;
+        cfg.password = process.env.SCREEPS_PASSWORD;
+    }
+    if (cfg.token && process.env.SCREEPS_AUTH) {
+        console.log('Setting auth token from env');
+        cfg.token = process.env.SCREEPS_AUTH;
+    }
 }
 
 export default {
