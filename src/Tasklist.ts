@@ -17,11 +17,11 @@ class TaskListClass {
         let tasks: Task[] = this.createSpawnTasks(room);
         tasks = tasks.concat(this.createDeliverTasks(room));
 
-        const leftOvers: Task[] = this.assignTasks(tasks);
+        const remainingTasks: Task[] = this.assignTasks(tasks);
 
         this.execute();
 
-        return leftOvers;
+        return remainingTasks;
     }
 
     private beforeRun(): void {
@@ -51,7 +51,7 @@ class TaskListClass {
                 var creep: CreepModel = jobless[name];
                 if (tasks[i].canBePerformedBy(creep)) {
                     creep.task = tasks[i];
-                    tasks = tasks.splice(i,1);
+                    tasks.splice(i,1);
                     i--;
                     break;
                 }

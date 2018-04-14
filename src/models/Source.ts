@@ -37,8 +37,6 @@ export default class SourceModel extends Source {
         const taskPositions = totalPositions.length - this.assignedCreeps
             .filter(c => (creep === undefined) || (c.id !== creep.id)).length;
 
-        console.log(this.id +': total('+totalPositions.length+'), loc('+locPositions+'), task('+taskPositions+')');
-
         return Math.min(taskPositions, locPositions);
     }
 
