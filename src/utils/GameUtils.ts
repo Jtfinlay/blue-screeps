@@ -20,6 +20,7 @@ class GameUtilsClass {
     public getStructureById(target: string): StructureType {
         return <StructureType> Game.getObjectById(target);
     }
+
 }
 
 const gameUtils = new GameUtilsClass();

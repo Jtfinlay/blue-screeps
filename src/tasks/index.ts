@@ -9,7 +9,9 @@ export interface Task {
 
 export type TaskType = 
     | HarvestEnergyTaskType
-    | DeliverEnergyTaskType;
+    | DeliverEnergyTaskType
+    | BuildRoadTaskType;
 
 export type HarvestEnergyTaskType = 'harvestenergy';
 export type DeliverEnergyTaskType = 'deliverenergy';
+export type BuildRoadTaskType = 'buildroad';

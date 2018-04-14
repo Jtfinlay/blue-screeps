@@ -1,5 +1,6 @@
 import CreepModel from './models/Creep';
 import GameUtils from './utils/GameUtils';
+import RoadBuildTask from './tasks/RoadBuilder';
 import RoomUtils from './utils/RoomUtils';
 import SourceModel from './models/Source';
 import StructureUtils from './utils/Structure';
@@ -14,7 +15,8 @@ class TaskListClass {
 
         const room = RoomUtils.firstRoom();
 
-        let tasks: Task[] = this.createSpawnTasks(room);
+        let tasks: Task[] = this.createSourceTasks(room);
+        tasks = tasks.concat(this.createBuildTasks(room));
         tasks = tasks.concat(this.createDeliverTasks(room));
 
         const remainingTasks: Task[] = this.assignTasks(tasks);
@@ -29,7 +31,7 @@ class TaskListClass {
         GameUtils.Creeps.forEach(creep => creep.validateTask());
     }
 
-    private createSpawnTasks(room: Room): Task[] {
+    private createSourceTasks(room: Room): Task[] {
         const results = RoomUtils.findSourcesInRoom(room).map(source => source.createTasks());
         return [].concat.apply([], results);
     }
@@ -47,6 +49,10 @@ class TaskListClass {
             tasks = tasks.concat(new DeliverTask(room.controller.id));
         }
         return tasks;
+    }
+
+    private createBuildTasks(room: Room): Task[] {
+        return room.find(FIND_CONSTRUCTION_SITES).map(site => new RoadBuildTask(site.id));
     }
 
     private assignTasks(tasks: Task[]): Task[] {

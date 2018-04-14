@@ -1,5 +1,7 @@
+import ConstructionPlanner from './ConstructionPlanner';
 import CreepModel from './models/Creep';
 import { ErrorMapper } from './utils/ErrorMapper';
+import RoomUtils from './utils/RoomUtils';
 import TaskList from './Tasklist';
 import { Task } from './tasks';
 
@@ -13,6 +15,8 @@ export const loop = ErrorMapper.wrapLoop(() => {
             delete Memory.creeps[name];
         }
     }
+
+    ConstructionPlanner.process(RoomUtils.firstRoom());
 
     const remainingTasks: Task[] = TaskList.process();
 
