@@ -35,13 +35,18 @@ class TaskListClass {
     }
 
     private createDeliverTasks(room: Room): Task[] {
-        const targets = room.find(FIND_STRUCTURES, {
+        let tasks: Task[];
+        const structures = room.find(FIND_STRUCTURES, {
             filter: (structure: AnyStructure) => {
                 return (StructureUtils.isHarvestTarget(structure)
                     && StructureUtils.getEnergy(structure) < StructureUtils.getEnergyCapacity(structure))
             }
         });
-        return targets.map(target => new DeliverTask(target.id));
+        tasks = structures.map(target => new DeliverTask(target.id));
+        if (room.controller) {
+            tasks = tasks.concat(new DeliverTask(room.controller.id));
+        }
+        return tasks;
     }
 
     private assignTasks(tasks: Task[]): Task[] {

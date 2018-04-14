@@ -1,5 +1,6 @@
 import CreepModel from '../models/Creep';
 import SourceModel from '../models/Source';
+import { StructureType } from './Structure';
 
 class GameUtilsClass {
     private creeps: CreepModel[] | null = null;
@@ -16,8 +17,8 @@ class GameUtilsClass {
         return new SourceModel(<Source>Game.getObjectById(target));
     }
 
-    public getStructureById(target: string): AnyStructure {
-        return <AnyStructure>Game.getObjectById(target);
+    public getStructureById(target: string): StructureType {
+        return <StructureType> Game.getObjectById(target);
     }
 }
 

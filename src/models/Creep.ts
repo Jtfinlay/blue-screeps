@@ -17,7 +17,6 @@ export default class CreepModel extends Creep {
 
     public validateTask(): void {
         if (this.task && !this.canCompleteTask()) {
-            console.log('validation failed for ' + this.name + ' with task ' + this.task.type);
             this.wipe();
         }
     }
@@ -25,7 +24,6 @@ export default class CreepModel extends Creep {
     public run(): void {
         if (!this.task) {
             this.say('bored');
-            console.log(this.name + ' doesn\'t have an action');
             return;
         }
 

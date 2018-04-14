@@ -1,3 +1,8 @@
+
+export type StructureType = 
+    | AnyStructure
+    | StructureController;
+
 class StructureUtils {
 
     public isHarvestTarget(structure: AnyStructure): boolean {

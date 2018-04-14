@@ -18,7 +18,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
     for (const name in Game.spawns) {
         const spawn = Game.spawns[name];
-        if (spawn.energy >= 200 && remainingTasks.length > 0) {
+        if (spawn.energy >= 200 && remainingTasks.filter(t => t.type !== 'deliverenergy').length > 0) {
             spawn.createCreep( [ WORK, CARRY, MOVE], 'Creep'+Game.time);
         }
     }
