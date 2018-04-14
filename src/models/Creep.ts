@@ -1,17 +1,10 @@
-import HarvestRole from '../tasks/Harvest';
-import SourceUtils from '../utils/Source';
-
-export type CreepTaskType = 
-    | GatherEnergyTaskType
-    | DeliverEnergyTaskType 
-    | null;
-
-export type DeliverEnergyTaskType = 'deliverenergy';
-export type GatherEnergyTaskType = 'gatherenergy';
+import HarvestTask from '../tasks/Harvest';
+import { Task, TaskType } from '../tasks';
+import DeliverTask from 'tasks/Deliver';
 
 export interface CreepStore extends CreepMemory {
-    task: CreepTaskType;
-    taskTarget: string | null;
+    taskType: TaskType | undefined;
+    taskTarget: string | undefined;
 }
 
 export default class CreepModel extends Creep {
@@ -22,13 +15,18 @@ export default class CreepModel extends Creep {
         this.prototype = creep;
     }
 
-    public run(): void {
+    public validateTask(): void {
         if (this.task && !this.canCompleteTask()) {
+            console.log('validation failed for ' + this.name + ' with task ' + this.task.type);
             this.wipe();
         }
+    }
 
+    public run(): void {
         if (!this.task) {
-            this.determineAction();
+            this.say('bored');
+            console.log(this.name + ' doesn\'t have an action');
+            return;
         }
 
         if (!this.performAction()) {
@@ -38,22 +36,34 @@ export default class CreepModel extends Creep {
         }
     }
 
-    public get task(): CreepTaskType {
-        return this.Store.task;
-    }
-
-    public set task(value: CreepTaskType) {
-        this.Store.task = value;
-        if (value) {
-            // this.say(value);
+    public get task(): Task | undefined {
+        switch (this.Store.taskType) {
+            case 'harvestenergy':
+                return new HarvestTask(<string>this.taskTarget);
+            case 'deliverenergy':
+                return new DeliverTask(<string>this.taskTarget);
+            default:
+                return undefined;
         }
     }
 
-    public get taskTarget(): string | null {
+    public set task(value: Task | undefined) {
+        if (value === undefined) {
+            this.Store.taskType = undefined;
+            this.Store.taskTarget = undefined;
+        } else {
+            this.Store.taskType = value.type;
+            this.Store.taskTarget = value.targetId;
+            
+            this.say(value.type);
+        }
+    }
+
+    public get taskTarget(): string | undefined {
         return this.Store.taskTarget;
     }
 
-    public set taskTarget(value: string | null) {
+    public set taskTarget(value: string | undefined) {
         this.Store.taskTarget = value;
     }
 
@@ -61,73 +71,30 @@ export default class CreepModel extends Creep {
         return 2 * this.body.filter(part => part.type === WORK).length;
     }
 
+    public atPosition(pos: RoomPosition): boolean {
+        return (pos.x === this.pos.x) && (pos.y === this.pos.y);
+    }
+
     private get Store(): CreepStore {
         return (Memory.creeps[this.prototype.name] as CreepStore);
     }
 
     private wipe(): void {
-        this.task = null;
-        this.taskTarget = null;
+        this.task = undefined;
+        this.taskTarget = undefined;
     }
 
     private canCompleteTask(): boolean {
-        if (!this.canPerformAction(this.task)) {
+        if (!this.task) {
             return false;
         }
-        switch (this.task) {
-            case 'gatherenergy':
-                if (this.taskTarget === null) {
-                    return false;
-                }
-                return SourceUtils.hasRoomForCreep(<Source>Game.getObjectById(this.taskTarget), this);
-            default:
-                return true;
-        }
-    }
-
-    private canPerformAction(task: CreepTaskType): boolean {
-        switch (task) {
-            case 'gatherenergy':
-                return HarvestRole.canHarvestEnergy(this);
-            case 'deliverenergy':
-                return HarvestRole.canDeliverEnergy(this);
-            default:
-                console.log('Unknown action');
-                return false;
-        }
+        return this.task.canBePerformedBy(this);
     }
 
     private performAction(): boolean {
-        switch (this.task) {
-            case 'gatherenergy':
-                return HarvestRole.gatherEnergy(this);
-            case 'deliverenergy':
-                return HarvestRole.deliverEnergy(this);
-            default:
-                console.log('Unknown action');
-                return false;
+        if (!this.task) {
+            return false;
         }
-    }
-
-    private determineAction(): boolean {
-        // Can we harvest energy?
-        if (HarvestRole.canHarvestEnergy(this)) {
-            const source = HarvestRole.findHarvestSource(this);
-            if (source) {
-                this.task = 'gatherenergy';
-                this.taskTarget = source.id;
-                return true;
-            }
-        }
-
-        // Can we provide energy?
-        const target = HarvestRole.findHarvestTarget(this);
-        if (target) {
-            this.task = 'deliverenergy',
-            this.taskTarget = target.id;
-            return true;
-        }
-
-        return false;
+        return this.task.perform(this);
     }
 }

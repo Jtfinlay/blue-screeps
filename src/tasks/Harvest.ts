@@ -1,62 +1,37 @@
-import StructureUtils from '../utils/Structure';
-import SourceUtils from '../utils/Source';
-import CreepModel, { CreepTaskType } from '../models/Creep';
+import SourceModel from '../models/Source';
+import CreepModel from '../models/Creep';
+import GameUtils from '../utils/GameUtils';
+import { Task, HarvestEnergyTaskType, TaskType } from './index';
 
-class HarvestRoleClass {
+export default class HarvestTask implements Task {
+    private source: SourceModel;
+    
+    public type: TaskType = 'harvestenergy';
 
-    public canHarvestEnergy(creep: CreepModel): boolean {
-        return (creep.carry.energy < creep.carryCapacity);
+    constructor(sourceId: string) {
+        this.source = GameUtils.getSourceById(sourceId);
     }
 
-    public canDeliverEnergy(creep: CreepModel): boolean {
-        return (creep.carry.energy > 0);
+    public get targetId(): string {
+        return this.source.id;
     }
 
-    public findHarvestSource(creep: CreepModel): Source | null {
-        const sources = creep.room.find(FIND_SOURCES)
-            .filter(source => SourceUtils.hasRoomForCreep(source, creep))
-        if (sources.length <= 0) {
-            return null;
-        }
-        return sources[0];
+    public get Source(): SourceModel {
+        return this.source;
     }
 
-    public gatherEnergy(creep: CreepModel): boolean {
-        const source = <Source | null>Game.getObjectById(<string>creep.taskTarget);
-        if (!source) {
-            return false;
-        }
-        if (creep.harvest(source) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(source, {visualizePathStyle: {stroke: '#ffaa00'}});
-        }
-        return true;
-    }
-
-    public deliverEnergy(creep: CreepModel): boolean {
-        const target = <AnyStructure | null>Game.getObjectById(<string>creep.taskTarget);
-        if (!target) {
+    public canBePerformedBy(creep: CreepModel): boolean {
+        if (creep.carry.energy >= creep.carryCapacity) {
             return false;
         }
 
-        if (creep.transfer(target, RESOURCE_ENERGY) === ERR_NOT_IN_RANGE) {
-            creep.moveTo(target, {visualizePathStyle: {stroke: '#ffffff'}});
-        }
-        return true;
+        return this.source.openHarvestPositions(creep) > 0;
     }
 
-    public findHarvestTarget(creep: CreepModel): AnyStructure | null {
-        const targets = creep.room.find(FIND_STRUCTURES, {
-            filter: (structure: AnyStructure) => {
-                return (StructureUtils.isHarvestTarget(structure)
-                    && StructureUtils.getEnergy(structure) < StructureUtils.getEnergyCapacity(structure))
-            }
-        });
-        if (targets.length > 0) {
-            return targets[0];
+    public perform(creep: CreepModel): boolean {
+        if (creep.harvest(this.source) === ERR_NOT_IN_RANGE) {
+            creep.moveTo(this.source, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
-        return null;
+        return true;
     }
 }
-
-const HarvestRole = new HarvestRoleClass();
-export default HarvestRole;
