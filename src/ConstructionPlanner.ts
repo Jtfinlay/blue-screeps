@@ -3,9 +3,35 @@
 class ConstructionPlannerClass {
 
     public process(room: Room): void {
-        if (Game.time % 100 === 0) {
+        // if (Game.time % 100 === 0) {
+            this.planContainers(room);
             this.planRoads(room);
-        }
+        // }
+    }
+
+    private planContainers(room: Room): void {
+        const maxContainers: number = 5;
+        let plannedContainers: number = 0;
+        const sourcePos = room.find(FIND_SOURCES).map(source => source.pos);
+        const spawnPos = room.find(FIND_MY_SPAWNS).map(spawn => spawn.pos);
+        const controllerPos = room.controller && room.controller.pos;
+
+        spawnPos.forEach(spawn => {
+            if (plannedContainers >= maxContainers) {
+                return;
+            }
+            if (controllerPos) {
+                this.planContainerBetweenPositions(room, 1/8, controllerPos, spawn);
+                plannedContainers++;
+            }
+            sourcePos.forEach(source => {
+                if (plannedContainers >= maxContainers) {
+                    return;
+                }
+                this.planContainerBetweenPositions(room, 1/8, source, spawn);
+                plannedContainers++;
+            })
+        });
     }
 
     private planRoads(room: Room): void {
@@ -24,14 +50,18 @@ class ConstructionPlannerClass {
     }
 
     private planRoadsFromPosToPos(room: Room, source: RoomPosition, target: RoomPosition): void {
-        const path = PathFinder.search(source, target);
-        this.planRoadsAlongPath(room, path.path);
-    }
-
-    private planRoadsAlongPath(room: Room, path: RoomPosition[]): void {
+        const path = PathFinder.search(source, target).path;
         path.forEach(pos => {
             room.createConstructionSite(pos.x, pos.y, STRUCTURE_ROAD);
         })
+    }
+
+    private planContainerBetweenPositions(room: Room, fraction: number, source: RoomPosition, target: RoomPosition) {
+        let path = PathFinder.search(source, target).path;
+        let iPos = Math.ceil(path.length * fraction);
+        let pos = path[iPos];
+        room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER);
+        console.log('create stie at ' + pos.x + ', ' + pos.y);
     }
 
 }
