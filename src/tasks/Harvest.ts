@@ -28,6 +28,11 @@ export default class HarvestTask implements Task {
         return this.source.openHarvestPositions(creep) > 0;
     }
 
+    public calculateEfficiency(creep: CreepModel) : number {
+        const workEfficiency = 2 * creep.body.filter(part => part.type === WORK).length;
+        
+    }
+
     public perform(creep: CreepModel): boolean {
         if (creep.harvest(this.source) === ERR_NOT_IN_RANGE) {
             creep.moveTo(this.source, {visualizePathStyle: {stroke: '#ffaa00'}});

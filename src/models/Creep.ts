@@ -71,8 +71,11 @@ export default class CreepModel extends Creep {
         this.Store.taskTarget = value;
     }
 
-    public get energyHarvestEfficiency(): number {
-        return 2 * this.body.filter(part => part.type === WORK).length;
+    public get speed(): number {
+        const weight = this.body.map(part => part.type !== 'move' && part.type !== 'carry').length
+            + Math.ceil(this.carry.energy / 49);
+        const speed = this.body.map(part => part.type === 'move').length;
+        return weight / speed;
     }
 
     public atPosition(pos: RoomPosition): boolean {
