@@ -11,6 +11,14 @@ class ConstructionPlannerClass {
     private planRoads(room: Room): void {
         const spawnPos = room.find(FIND_MY_SPAWNS).map(spawn => spawn.pos);
         const sourcePos = room.find(FIND_SOURCES).map(source => source.pos);
+        const controllerPos = room.controller && room.controller.pos;
+
+        if (controllerPos) {
+            spawnPos.forEach(spawn => {
+                const path = PathFinder.search(spawn, controllerPos);
+                this.planRoadsAlongPath(room, path.path);
+            });
+        }
 
         spawnPos.forEach(spawn => sourcePos.forEach(source => {
             const path = PathFinder.search(spawn, source);
