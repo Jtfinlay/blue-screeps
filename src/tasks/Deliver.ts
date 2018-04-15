@@ -20,6 +20,17 @@ export default class DeliverTask implements Task {
         return this.structure;
     }
 
+    public chooseCreep(creeps: CreepModel[]): CreepModel | null {
+        const sorted = creeps.sort(c => PathFinder.search(c.pos, this.structure.pos).cost)
+        for (let name in sorted) {
+            let creep: CreepModel = sorted[name];
+            if (this.canBePerformedBy(creep)) {
+                return creep;
+            }
+        }
+        return null;
+    }
+
     public canBePerformedBy(creep: CreepModel): boolean {
         if (this.structure instanceof StructureController) {
             return creep.carry.energy > 0;

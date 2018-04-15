@@ -39,15 +39,19 @@ export default class CreepModel extends Creep {
     }
 
     public get task(): Task | undefined {
-        switch (this.Store.taskType) {
-            case 'harvestenergy':
-                return new HarvestTask(<string>this.taskTarget);
-            case 'deliverenergy':
-                return new DeliverTask(<string>this.taskTarget);
-            case 'buildroad':
-                return new RoadBuildTask(<string>this.taskTarget);
-            default:
-                return undefined;
+        try {
+            switch (this.Store.taskType) {
+                case 'harvestenergy':
+                    return new HarvestTask(<string>this.taskTarget);
+                case 'deliverenergy':
+                    return new DeliverTask(<string>this.taskTarget);
+                case 'buildroad':
+                    return new RoadBuildTask(<string>this.taskTarget);
+                default:
+                    return undefined;
+            }
+        } catch {
+            return undefined;
         }
     }
 
@@ -58,7 +62,6 @@ export default class CreepModel extends Creep {
         } else {
             this.Store.taskType = value.type;
             this.Store.taskTarget = value.targetId;
-            
             this.say(value.type);
         }
     }
@@ -71,15 +74,18 @@ export default class CreepModel extends Creep {
         this.Store.taskTarget = value;
     }
 
-    public get energyHarvestEfficiency(): number {
-        return 2 * this.body.filter(part => part.type === WORK).length;
+    public get speed(): number {
+        const weight = this.body.map(part => part.type !== 'move' && part.type !== 'carry').length
+            + Math.ceil(this.carry.energy / 49);
+        const speed = this.body.map(part => part.type === 'move').length;
+        return weight / speed;
     }
 
     public atPosition(pos: RoomPosition): boolean {
         return (pos.x === this.pos.x) && (pos.y === this.pos.y);
     }
 
-    private get Store(): CreepStore {
+    public get Store(): CreepStore {
         return (Memory.creeps[this.prototype.name] as CreepStore);
     }
 

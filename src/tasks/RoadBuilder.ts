@@ -8,10 +8,24 @@ export default class RoadBuildTask implements Task {
 
     constructor(constructionSiteId: string) {
         this.constructionSite = <ConstructionSite<BuildableStructureConstant>>Game.getObjectById(constructionSiteId);
+        if (!this.constructionSite) {
+            throw Error('Not Found!');
+        }
     }
 
     public get targetId(): string {
         return this.constructionSite.id;
+    }
+
+    public chooseCreep(creeps: CreepModel[]): CreepModel | null {
+        const sorted = creeps.sort(c => PathFinder.search(c.pos, this.constructionSite.pos).cost)
+        for (let name in sorted) {
+            let creep: CreepModel = sorted[name];
+            if (this.canBePerformedBy(creep)) {
+                return creep;
+            }
+        }
+        return null;
     }
 
     public canBePerformedBy(creep: CreepModel): boolean {

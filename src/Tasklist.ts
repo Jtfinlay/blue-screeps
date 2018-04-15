@@ -58,14 +58,11 @@ class TaskListClass {
     private assignTasks(tasks: Task[]): Task[] {
         for (var i=0; i<tasks.length; i++) {
             let jobless = GameUtils.Creeps.filter(creep => !creep.task);
-            for (var name in jobless) {
-                var creep: CreepModel = jobless[name];
-                if (tasks[i].canBePerformedBy(creep)) {
-                    creep.task = tasks[i];
-                    tasks.splice(i,1);
-                    i--;
-                    break;
-                }
+            let creep = tasks[i].chooseCreep(jobless);
+            if (creep !== null) {
+                creep.task = tasks[i];
+                tasks.splice(i,1);
+                i--;
             }
         }
 

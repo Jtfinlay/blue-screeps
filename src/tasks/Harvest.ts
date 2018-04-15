@@ -20,12 +20,40 @@ export default class HarvestTask implements Task {
         return this.source;
     }
 
+    public chooseCreep(creeps: CreepModel[]): CreepModel | null {
+        if (creeps.length <= 0) {
+            return null;
+        }
+
+        let efficiencies: number[] = Array.from(new Set(
+            creeps.map(c => this.calculateEfficiency(c))
+        )).sort().reverse();
+
+        for (var i=0; i<efficiencies.length; i++) {
+            let eff = efficiencies[i];
+            if (eff <= 0) {
+                continue;
+            }
+            let effCreeps = creeps.filter(c => this.calculateEfficiency(c) === eff);
+            let ordered = effCreeps.sort(c => PathFinder.search(c.pos, this.source.pos).cost);
+            return ordered[0];
+        }
+        return null;
+    }
+
     public canBePerformedBy(creep: CreepModel): boolean {
         if (creep.carry.energy >= creep.carryCapacity) {
             return false;
         }
 
         return this.source.openHarvestPositions(creep) > 0;
+    }
+
+    public calculateEfficiency(creep: CreepModel) : number {
+        if (!this.canBePerformedBy(creep)) {
+            return 0;
+        }
+        return 2 * creep.body.filter(part => part.type === WORK).length;
     }
 
     public perform(creep: CreepModel): boolean {
