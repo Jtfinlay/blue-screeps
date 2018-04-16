@@ -16,9 +16,10 @@
     "watch-pserver": "rollup -cw --dest pserver"
   },
   "devDependencies": {
-    "@types/node": "^9.6.4",
     "@types/lodash": "^3.10.1",
+    "@types/node": "^9.6.4",
     "@types/screeps": "^2.1.0",
+    "lodash": "^4.17.5",
     "rollup": "^0.55.3",
     "rollup-plugin-clean": "^1.0.0",
     "rollup-plugin-commonjs": "^8.2.6",

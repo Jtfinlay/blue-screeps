@@ -1,10 +1,10 @@
 import CreepModel from 'models/Creep';
 import { BuildRoadTaskType, Task, TaskType } from './index';
 
-export default class RoadBuildTask implements Task {
+export default class BuildTask implements Task {
     private constructionSite: ConstructionSite;
 
-    public type: TaskType = 'buildroad';
+    public type: TaskType = 'build';
 
     constructor(constructionSiteId: string) {
         this.constructionSite = <ConstructionSite<BuildableStructureConstant>>Game.getObjectById(constructionSiteId);

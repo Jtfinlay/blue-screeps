@@ -15,4 +15,4 @@ export type TaskType =
 
 export type HarvestEnergyTaskType = 'harvestenergy';
 export type DeliverEnergyTaskType = 'deliverenergy';
-export type BuildRoadTaskType = 'buildroad';
+export type BuildRoadTaskType = 'build';

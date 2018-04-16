@@ -1,3 +1,4 @@
+// import _sum from 'lodash';
 
 export type StructureType = 
     | AnyStructure
@@ -8,7 +9,8 @@ class StructureUtils {
     public isHarvestTarget(structure: AnyStructure): boolean {
         return (structure instanceof StructureSpawn)
             || (structure instanceof StructureTower)
-            || (structure instanceof StructureExtension);
+            || (structure instanceof StructureExtension)
+            || (structure instanceof StructureContainer);
     }
 
     public getEnergy(structure: AnyStructure): number {
@@ -22,6 +24,10 @@ class StructureUtils {
 
         if (structure instanceof StructureTower) {
             return (structure as StructureTower).energy;
+        }
+
+        if (structure instanceof StructureContainer) {
+            return _.sum((structure as StructureContainer).store);
         }
 
         return 0;
@@ -38,6 +44,10 @@ class StructureUtils {
 
         if (structure instanceof StructureTower) {
             return (structure as StructureTower).energyCapacity;
+        }
+
+        if (structure instanceof StructureContainer) {
+            return (structure as StructureContainer).storeCapacity;
         }
 
         return 0;

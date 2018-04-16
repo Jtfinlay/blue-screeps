@@ -1,6 +1,6 @@
 import CreepModel from './models/Creep';
 import GameUtils from './utils/GameUtils';
-import RoadBuildTask from './tasks/RoadBuilder';
+import RoadBuildTask from './tasks/Builder';
 import RoomUtils from './utils/RoomUtils';
 import SourceModel from './models/Source';
 import StructureUtils from './utils/Structure';

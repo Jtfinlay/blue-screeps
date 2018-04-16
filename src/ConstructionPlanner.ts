@@ -12,6 +12,8 @@ class ConstructionPlannerClass {
     private planContainers(room: Room): void {
         const maxContainers: number = 5;
         let plannedContainers: number = 0;
+
+        const mineralPos = room.find(FIND_MINERALS).map(mineral => mineral.pos);
         const sourcePos = room.find(FIND_SOURCES).map(source => source.pos);
         const spawnPos = room.find(FIND_MY_SPAWNS).map(spawn => spawn.pos);
         const controllerPos = room.controller && room.controller.pos;
@@ -30,7 +32,24 @@ class ConstructionPlannerClass {
                 }
                 this.planContainerBetweenPositions(room, 1/8, source, spawn);
                 plannedContainers++;
-            })
+            });
+            mineralPos.forEach(min => {
+                if (plannedContainers >= maxContainers) {
+                    return;
+                }
+                this.planContainerBetweenPositions(room, 1/8, min, spawn);
+                plannedContainers++;
+            });
+
+            // If another left, drop near the spawn.
+            if (controllerPos) {
+                console.log('planned: '+ plannedContainers);
+                if (plannedContainers >= maxContainers) {
+                    return;
+                }
+                this.planContainerBetweenPositions(room, 1/2, controllerPos, spawn);
+                plannedContainers++;
+            }
         });
     }
 
@@ -60,8 +79,6 @@ class ConstructionPlannerClass {
         let path = PathFinder.search(source, target).path;
         let iPos = Math.ceil(path.length * fraction);
         let pos = path[iPos];
-        room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER);
-        console.log('create stie at ' + pos.x + ', ' + pos.y);
     }
 
 }
