@@ -3,10 +3,10 @@
 class ConstructionPlannerClass {
 
     public process(room: Room): void {
-        // if (Game.time % 100 === 0) {
+        if (Game.time % 100 === 0) {
             this.planContainers(room);
             this.planRoads(room);
-        // }
+        }
     }
 
     private planContainers(room: Room): void {
@@ -43,7 +43,6 @@ class ConstructionPlannerClass {
 
             // If another left, drop near the spawn.
             if (controllerPos) {
-                console.log('planned: '+ plannedContainers);
                 if (plannedContainers >= maxContainers) {
                     return;
                 }
