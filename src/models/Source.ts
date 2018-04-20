@@ -13,12 +13,12 @@ export default class SourceModel extends Source {
     }
 
     public createTasks(): Task[] {
+        if (this.peekEfficiency() <= this.currentHarvestEfficiency()) {
+            return [];
+        }
+
         return Array.from({length: this.openHarvestPositions()}, 
             () => new HarvestTask(this.id));
-    }
-
-    public get canBeHarvested(): boolean {
-        return this.energy > 0 || this.ticksToRegeneration < 20;
     }
 
     public totalHarvestPositions(range: number): RoomPosition[] {
@@ -26,10 +26,18 @@ export default class SourceModel extends Source {
             .filter(pos => !PositionUtils.isUnpassable(pos));
     }
 
+    public currentHarvestEfficiency(): number {
+        return this.assignedCreeps.map(c => HarvestTask.calculateEfficiency(c))
+            .reduce((a, b) => a + b);
+    }
+
+    public peekEfficiency() {
+        // The energy capacity changes by room, but it regenerates every 300 game ticks.
+        // Therefore ( capacity / 300 ) is the peek efficiency for harvesting per tick.
+        return Math.ceil(this.energyCapacity / 300);
+    }
+
     public openHarvestPositions(creep?: CreepModel): number {
-        if (!this.canBeHarvested) {
-            return 0;
-        }
         const totalPositions = this.totalHarvestPositions(1);
         const locPositions = totalPositions
             .filter(pos => !pos.lookFor('creep').length || 
