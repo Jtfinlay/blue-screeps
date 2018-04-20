@@ -6,6 +6,7 @@ import SourceModel from './models/Source';
 import StructureUtils from './utils/Structure';
 import { Task } from './tasks';
 import DeliverTask from 'tasks/Deliver';
+import GatherTask from 'tasks/Gather';
 
 class TaskListClass {
     private _taskList: Task[] = [];
@@ -15,9 +16,11 @@ class TaskListClass {
 
         const room = RoomUtils.firstRoom();
 
-        let tasks: Task[] = this.createSourceTasks(room);
+        let tasks: Task[] = [];
+        tasks = tasks.concat(this.createHarvestTasks(room));
         tasks = tasks.concat(this.createBuildTasks(room));
         tasks = tasks.concat(this.createDeliverTasks(room));
+        tasks = tasks.concat(this.createGatherTasks(room));
 
         const remainingTasks: Task[] = this.assignTasks(tasks);
 
@@ -31,7 +34,14 @@ class TaskListClass {
         GameUtils.Creeps.forEach(creep => creep.validateTask());
     }
 
-    private createSourceTasks(room: Room): Task[] {
+    private createGatherTasks(room: Room): Task[] {
+        const unAssignedResources = RoomUtils.findDroppedResourcesInRoom(room)
+            .filter(res => 
+                undefined === GameUtils.Creeps.find(c => c.taskTarget === res.id))
+        return unAssignedResources.map(res => new GatherTask(res.id));
+    }
+
+    private createHarvestTasks(room: Room): Task[] {
         const results = RoomUtils.findSourcesInRoom(room).map(source => source.createTasks());
         return [].concat.apply([], results);
     }

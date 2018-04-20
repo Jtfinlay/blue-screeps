@@ -18,7 +18,7 @@ export default class BuildTask implements Task {
     }
 
     public chooseCreep(creeps: CreepModel[]): CreepModel | null {
-        const sorted = creeps.sort(c => PathFinder.search(c.pos, this.constructionSite.pos).cost)
+        const sorted = creeps.sort(c => PathFinder.search(c.pos, this.constructionSite.pos).cost);
         for (let name in sorted) {
             let creep: CreepModel = sorted[name];
             if (this.canBePerformedBy(creep)) {
@@ -33,7 +33,7 @@ export default class BuildTask implements Task {
     }
 
     public perform(creep: CreepModel): boolean {
-        if(creep.build(this.constructionSite) == ERR_NOT_IN_RANGE) {
+        if (creep.build(this.constructionSite) == ERR_NOT_IN_RANGE) {
             creep.moveTo(this.constructionSite, {visualizePathStyle: {stroke: '#BFFF00'}});
         }
         return true;

@@ -50,6 +50,10 @@ export default class HarvestTask implements Task {
     }
 
     public perform(creep: CreepModel): boolean {
+        if (creep.carry.energy >= creep.carryCapacity) {
+            creep.drop(RESOURCE_ENERGY);
+        }
+
         if (creep.harvest(this.source) === ERR_NOT_IN_RANGE) {
             creep.moveTo(this.source, {visualizePathStyle: {stroke: '#ffaa00'}});
         }

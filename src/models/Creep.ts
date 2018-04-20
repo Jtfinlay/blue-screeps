@@ -2,6 +2,7 @@ import HarvestTask from '../tasks/Harvest';
 import { Task, TaskType } from '../tasks';
 import DeliverTask from 'tasks/Deliver';
 import RoadBuildTask from 'tasks/Builder';
+import GatherTask from 'tasks/Gather';
 
 export interface CreepStore extends CreepMemory {
     taskType: TaskType | undefined;
@@ -47,7 +48,10 @@ export default class CreepModel extends Creep {
                     return new DeliverTask(<string>this.taskTarget);
                 case 'build':
                     return new RoadBuildTask(<string>this.taskTarget);
+                case 'gatherresource':
+                    return new GatherTask(<string>this.taskTarget);
                 default:
+                    console.log(this.name + 'doesn\'t know how to ' + this.Store.taskType);
                     return undefined;
             }
         } catch {

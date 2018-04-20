@@ -21,6 +21,9 @@ class GameUtilsClass {
         return <StructureType> Game.getObjectById(target);
     }
 
+    public getResourceById(target: string): Resource {
+        return <Resource> Game.getObjectById(target);
+    }
 }
 
 const gameUtils = new GameUtilsClass();
