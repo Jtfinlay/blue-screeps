@@ -27,8 +27,12 @@ export default class SourceModel extends Source {
     }
 
     public currentHarvestEfficiency(): number {
-        return this.assignedCreeps.map(c => HarvestTask.calculateEfficiency(c))
-            .reduce((a, b) => a + b);
+        let efficiencies = this.assignedCreeps.map(c => HarvestTask.calculateEfficiency(c))
+        if (efficiencies.length <= 0) {
+            return 0;
+        } else {
+            return efficiencies.reduce((a, b) => a + b);
+        }
     }
 
     public peekEfficiency() {
