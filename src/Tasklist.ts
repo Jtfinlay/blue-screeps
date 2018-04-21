@@ -22,6 +22,7 @@ class TaskListClass {
         tasks = tasks.concat(this.createBuildTasks(room));
         tasks = tasks.concat(this.createDeliverTasks(room));
         tasks = tasks.concat(this.createGatherTasks(room));
+        tasks = this.sortTasksByPriority(tasks);
 
         const remainingTasks: Task[] = this.assignTasks(tasks);
 
@@ -67,7 +68,6 @@ class TaskListClass {
     }
 
     private assignTasks(tasks: Task[]): Task[] {
-        tasks = tasks.sort((a, b) => a.priority - b.priority);
         for (var i=0; i<tasks.length; i++) {
             let jobless = GameUtils.Creeps.filter(creep => !creep.task);
             if (jobless.length === 0) {
@@ -83,6 +83,11 @@ class TaskListClass {
         }
 
         return tasks;
+    }
+
+    private sortTasksByPriority(tasks: Task[]) : Task[] {
+        // in other method for easy profiling.
+        return tasks.sort((a, b) => a.priority - b.priority);
     }
 
     private execute(): void {

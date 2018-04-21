@@ -40,6 +40,7 @@ class PositionUtilsClass {
         return result;
      }
 }
+
 profiler.registerClass(PositionUtilsClass, 'positionUtils');
 
 const utils = new PositionUtilsClass();

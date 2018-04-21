@@ -7,6 +7,7 @@ import profiler from 'screeps-profiler';
 
 export default class GatherTask implements Task {
     private resource: Resource;
+    private maxWorkers: number = 5;
 
     constructor(resourceId: string) {
         this.resource = GameUtils.getResourceById(resourceId);
@@ -16,7 +17,7 @@ export default class GatherTask implements Task {
     }
 
     public get priority(): number {
-        const minPriority = 50;
+        const minPriority = 45;
         const maxPriority = 100;
 
         // Once we hit 1500 energy in the pile, highest priority.
@@ -64,6 +65,18 @@ export default class GatherTask implements Task {
             creep.moveTo(this.resource, {visualizePathStyle: {stroke: '#ffaa00'}});
         }
         return true;
+    }
+
+    public spawnCreep(): BodyPartConstant[] | null {
+        if ((this.totalWorkers() < this.maxWorkers)
+            && this.priority <= 60) {
+            return [ WORK, CARRY, MOVE];
+        }
+        return null;
+    }
+
+    private totalWorkers(): number {
+        return GameUtils.Creeps.filter(c => c.taskTarget === this.type).length;
     }
 }
 profiler.registerClass(GatherTask, 'gatherTask');

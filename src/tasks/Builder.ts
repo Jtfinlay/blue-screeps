@@ -1,9 +1,11 @@
 import CreepModel from 'models/Creep';
 import { BuildRoadTaskType, Task, TaskType } from './index';
 import profiler from 'screeps-profiler';
+import GameUtils from 'utils/GameUtils';
 
 export default class BuildTask implements Task {
     private constructionSite: ConstructionSite;
+    private maxWorkers: number = 5;
 
     public type: TaskType = 'build';
 
@@ -52,6 +54,17 @@ export default class BuildTask implements Task {
             creep.moveTo(this.constructionSite, {visualizePathStyle: {stroke: '#BFFF00'}});
         }
         return true;
+    }
+
+    public spawnCreep(): BodyPartConstant[] | null {
+        if (this.totalWorkers() < this.maxWorkers) {
+            return [ WORK, CARRY, MOVE];
+        }
+        return null;
+    }
+
+    private totalWorkers(): number {
+        return GameUtils.Creeps.filter(c => c.taskTarget === this.type).length;
     }
 }
 profiler.registerClass(BuildTask, 'buildTask');

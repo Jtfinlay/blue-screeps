@@ -6,6 +6,7 @@ export interface Task {
     priority: number;
     canBePerformedBy(creep: CreepModel): boolean;
     chooseCreep(creeps: CreepModel[]): CreepModel | null;
+    spawnCreep(): BodyPartConstant[] | null;
     perform(creep: CreepModel): boolean;
 }
 

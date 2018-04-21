@@ -64,5 +64,9 @@ export default class HarvestTask implements Task {
         }
         return true;
     }
+
+    public spawnCreep(): BodyPartConstant[] | null {
+        return [ WORK, CARRY, MOVE];
+    }
 }
 profiler.registerClass(HarvestTask, 'harvestTask');

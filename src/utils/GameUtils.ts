@@ -34,5 +34,5 @@ class GameUtilsClass {
 }
 profiler.registerClass(GameUtilsClass, 'gameUtils');
 
-const gameUtils = new GameUtilsClass();
-export default gameUtils;
+const GameUtils = new GameUtilsClass();
+export default GameUtils;

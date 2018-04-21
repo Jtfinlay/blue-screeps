@@ -6,6 +6,7 @@ import profiler from 'screeps-profiler';
 
 export default class DeliverTask implements Task {
     private structure: StructureType;
+    private maxWorkers: number = 5;
 
     public type: TaskType = 'deliverenergy';
 
@@ -61,5 +62,15 @@ export default class DeliverTask implements Task {
         return true;
     }
 
+    public spawnCreep(): BodyPartConstant[] | null {
+        if (this.totalWorkers() < this.maxWorkers) {
+            return [ WORK, CARRY, MOVE];
+        }
+        return null;
+    }
+
+    private totalWorkers(): number {
+        return GameUtils.Creeps.filter(c => c.taskTarget === this.type).length;
+    }
 }
 profiler.registerClass(DeliverTask, 'deliverTask');

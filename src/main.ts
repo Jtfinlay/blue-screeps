@@ -29,7 +29,16 @@ export const loop = ErrorMapper.wrapLoop(() => {
         for (const name in Game.spawns) {
             const spawn = Game.spawns[name];
             if (spawn.energy >= 200 && remainingTasks.filter(t => t.type !== 'deliverenergy').length > 0) {
-                spawn.createCreep( [ WORK, CARRY, MOVE], 'Creep'+Game.time);
+                const task = remainingTasks.find(t => t.spawnCreep() !== null);
+                if (task === undefined) {
+                    break;
+                }
+                const creepBody = task.spawnCreep();
+                
+                if (creepBody !== null) {
+                    console.log('Spawning creep from ' + task.type);
+                    spawn.createCreep(creepBody, 'Creep'+Game.time);
+                }
             }
         }
     });
