@@ -13,6 +13,20 @@ export default class BuildTask implements Task {
         }
     }
 
+    public get priority(): number {
+        switch (this.constructionSite.structureType) {
+            case STRUCTURE_CONTAINER:
+                return 50;
+            case STRUCTURE_ROAD:
+                return 65;
+            case STRUCTURE_WALL:
+                return 70;
+            default:
+            console.log('unknown priority to assigned for buildTask of ' + this.constructionSite.structureType);
+            return 60;
+        }
+    }
+
     public get targetId(): string {
         return this.constructionSite.id;
     }

@@ -13,6 +13,11 @@ export default class GatherTask implements Task {
         }
     }
 
+    public get priority(): number {
+        // todo - look at total capacity to determine priority.
+        return 50;
+    }
+
     public type: TaskType = 'gatherresource';
 
     public get targetId(): string {

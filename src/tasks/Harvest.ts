@@ -12,6 +12,10 @@ export default class HarvestTask implements Task {
         this.source = GameUtils.getSourceById(sourceId);
     }
 
+    public get priority(): number {
+        return 50;
+    }
+
     public get targetId(): string {
         return this.source.id;
     }

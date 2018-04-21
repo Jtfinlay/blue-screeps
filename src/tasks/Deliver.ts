@@ -5,11 +5,24 @@ import StructureUtils, { StructureType } from 'utils/Structure';
 
 export default class DeliverTask implements Task {
     private structure: StructureType;
-    
+
     public type: TaskType = 'deliverenergy';
 
     constructor(structureId: string) {
         this.structure = GameUtils.getStructureById(structureId);
+    }
+
+    public get priority(): number {
+        switch (this.structure.structureType) {
+            case STRUCTURE_CONTROLLER:
+            case STRUCTURE_SPAWN:
+            case STRUCTURE_CONTAINER:
+                // todo - figure out priority for each.
+                return 60;
+            default:
+                console.log('unknown priority to assigned for deliverTask of ' + this.structure.structureType);
+                return 60;
+        }
     }
 
     public get targetId(): string {
