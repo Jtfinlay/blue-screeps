@@ -1,5 +1,6 @@
 import CreepModel from 'models/Creep';
 import { BuildRoadTaskType, Task, TaskType } from './index';
+import profiler from 'screeps-profiler';
 
 export default class BuildTask implements Task {
     private constructionSite: ConstructionSite;
@@ -53,3 +54,4 @@ export default class BuildTask implements Task {
         return true;
     }
 }
+profiler.registerClass(BuildTask, 'buildTask');

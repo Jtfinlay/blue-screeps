@@ -1,5 +1,6 @@
 import StructureUtils from '../utils/Structure';
 import SourceModel from '../models/Source';
+import profiler from 'screeps-profiler';
 
 class RoomUtilsClass {
     public findSourcesInRoom(room: Room): SourceModel[] {
@@ -29,6 +30,6 @@ class RoomUtilsClass {
         return structureEnergyCapacity.reduce((a,b) => a+b);
     }
 }
-
+profiler.registerClass(RoomUtilsClass, 'roomUtils');
 const roomUtils = new RoomUtilsClass();
 export default roomUtils;

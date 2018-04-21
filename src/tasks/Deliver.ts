@@ -2,6 +2,7 @@ import CreepModel from 'models/Creep';
 import { Task, DeliverEnergyTaskType, TaskType } from './index';
 import GameUtils from 'utils/GameUtils';
 import StructureUtils, { StructureType } from 'utils/Structure';
+import profiler from 'screeps-profiler';
 
 export default class DeliverTask implements Task {
     private structure: StructureType;
@@ -61,3 +62,4 @@ export default class DeliverTask implements Task {
     }
 
 }
+profiler.registerClass(DeliverTask, 'deliverTask');

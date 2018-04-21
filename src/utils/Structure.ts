@@ -1,4 +1,4 @@
-// import _sum from 'lodash';
+import profiler from 'screeps-profiler';
 
 export type StructureType = 
     | AnyStructure
@@ -53,6 +53,7 @@ class StructureUtils {
         return 0;
     }
 }
+profiler.registerClass(StructureUtils, 'structureUtils');
 
 const utils = new StructureUtils();
 export default utils;

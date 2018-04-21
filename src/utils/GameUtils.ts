@@ -1,14 +1,21 @@
 import CreepModel from '../models/Creep';
 import SourceModel from '../models/Source';
 import { StructureType } from './Structure';
+import profiler from 'screeps-profiler';
 
 class GameUtilsClass {
     private creeps: CreepModel[] | null = null;
+
+    public reset() {
+        this.creeps = null;
+    }
     
     public get Creeps(): CreepModel[] {
-        this.creeps = [];
-        for (const name in Game.creeps){
-            this.creeps.push(new CreepModel(Game.creeps[name]));
+        if (this.creeps == null) {
+            this.creeps = [];
+            for (const name in Game.creeps){
+                this.creeps.push(new CreepModel(Game.creeps[name]));
+            }
         }
         return this.creeps;
     }
@@ -25,6 +32,7 @@ class GameUtilsClass {
         return <Resource> Game.getObjectById(target);
     }
 }
+profiler.registerClass(GameUtilsClass, 'gameUtils');
 
 const gameUtils = new GameUtilsClass();
 export default gameUtils;

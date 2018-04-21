@@ -1,3 +1,4 @@
+import profiler from 'screeps-profiler';
 
 class PositionUtilsClass {
     public blocksMovement(lookAt: LookAtResult): boolean {
@@ -39,6 +40,7 @@ class PositionUtilsClass {
         return result;
      }
 }
+profiler.registerClass(PositionUtilsClass, 'positionUtils');
 
 const utils = new PositionUtilsClass();
 export default utils;

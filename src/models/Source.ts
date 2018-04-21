@@ -2,6 +2,7 @@ import CreepModel from './Creep';
 import GameUtils from '../utils/GameUtils';
 import HarvestTask from '../tasks/Harvest';
 import PositionUtils from '../utils/PositionUtils';
+import profiler from 'screeps-profiler';
 import { Task } from '../tasks';
 
 export default class SourceModel extends Source {
@@ -57,3 +58,4 @@ export default class SourceModel extends Source {
             .filter(creep => creep.taskTarget === this.id);
     }
 }
+profiler.registerClass(SourceModel, 'sourceModel');

@@ -1,4 +1,4 @@
-
+import profiler from 'screeps-profiler';
 
 class ConstructionPlannerClass {
 
@@ -81,6 +81,7 @@ class ConstructionPlannerClass {
     }
 
 }
+profiler.registerClass(ConstructionPlannerClass, 'constructionPlanner');
 
 const constructionPlanner = new ConstructionPlannerClass();
 export default constructionPlanner;

@@ -7,6 +7,7 @@ import StructureUtils from './utils/Structure';
 import { Task } from './tasks';
 import DeliverTask from 'tasks/Deliver';
 import GatherTask from 'tasks/Gather';
+import profiler from 'screeps-profiler';
 
 class TaskListClass {
     private _taskList: Task[] = [];
@@ -88,6 +89,7 @@ class TaskListClass {
         }
     }
 }
+profiler.registerClass(TaskListClass, 'taskList');
 
 const taskList = new TaskListClass();
 export default taskList;

@@ -2,6 +2,7 @@ import SourceModel from '../models/Source';
 import CreepModel from '../models/Creep';
 import GameUtils from '../utils/GameUtils';
 import { Task, HarvestEnergyTaskType, TaskType } from './index';
+import profiler from 'screeps-profiler';
 
 export default class HarvestTask implements Task {
     private source: SourceModel;
@@ -64,3 +65,4 @@ export default class HarvestTask implements Task {
         return true;
     }
 }
+profiler.registerClass(HarvestTask, 'harvestTask');

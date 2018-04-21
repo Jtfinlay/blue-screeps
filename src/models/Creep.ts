@@ -3,6 +3,7 @@ import { Task, TaskType } from '../tasks';
 import DeliverTask from 'tasks/Deliver';
 import RoadBuildTask from 'tasks/Builder';
 import GatherTask from 'tasks/Gather';
+import profiler from 'screeps-profiler';
 
 export interface CreepStore extends CreepMemory {
     taskType: TaskType | undefined;
@@ -114,3 +115,5 @@ export default class CreepModel extends Creep {
         return this.task.perform(this);
     }
 }
+
+profiler.registerClass(CreepModel, 'creepModel');

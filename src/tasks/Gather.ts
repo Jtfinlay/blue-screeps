@@ -3,6 +3,7 @@ import { Task, GatherResourceTaskType, TaskType } from './index';
 import GameUtils from 'utils/GameUtils';
 import RoomUtils from 'utils/RoomUtils';
 import StructureUtils, { StructureType } from 'utils/Structure';
+import profiler from 'screeps-profiler';
 
 export default class GatherTask implements Task {
     private resource: Resource;
@@ -65,3 +66,4 @@ export default class GatherTask implements Task {
         return true;
     }
 }
+profiler.registerClass(GatherTask, 'gatherTask');
