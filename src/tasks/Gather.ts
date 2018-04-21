@@ -1,6 +1,7 @@
 import CreepModel from 'models/Creep';
 import { Task, GatherResourceTaskType, TaskType } from './index';
 import GameUtils from 'utils/GameUtils';
+import RoomUtils from 'utils/RoomUtils';
 import StructureUtils, { StructureType } from 'utils/Structure';
 
 export default class GatherTask implements Task {
@@ -14,8 +15,22 @@ export default class GatherTask implements Task {
     }
 
     public get priority(): number {
-        // todo - look at total capacity to determine priority.
-        return 50;
+        const minPriority = 50;
+        const maxPriority = 100;
+
+        // Once we hit 1500 energy in the pile, highest priority.
+        let valuePriority = 100*(this.resource.amount/1500);
+        valuePriority = Math.min(maxPriority, valuePriority);
+        valuePriority = Math.max(minPriority, valuePriority);
+
+        let storagePriority = 100;
+        if (this.resource.room) {
+            storagePriority = 100*(RoomUtils.energyInRoom(this.resource.room) / RoomUtils.energyCapacityInRoom(this.resource.room));
+            storagePriority = Math.min(maxPriority, storagePriority);
+            storagePriority = Math.max(minPriority, storagePriority);
+        }
+
+        return Math.min(valuePriority, storagePriority);
     }
 
     public type: TaskType = 'gatherresource';

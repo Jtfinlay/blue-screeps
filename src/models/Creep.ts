@@ -51,7 +51,9 @@ export default class CreepModel extends Creep {
                 case 'gatherresource':
                     return new GatherTask(<string>this.taskTarget);
                 default:
-                    console.log(this.name + 'doesn\'t know how to ' + this.Store.taskType);
+                    if (this.Store.taskType !== undefined) {
+                        console.log(this.name + ' doesn\'t know how to ' + this.Store.taskType);
+                    }
                     return undefined;
             }
         } catch {

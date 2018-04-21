@@ -1,3 +1,4 @@
+import StructureUtils from '../utils/Structure';
 import SourceModel from '../models/Source';
 
 class RoomUtilsClass {
@@ -12,6 +13,20 @@ class RoomUtilsClass {
             return Game.rooms[name];
         }
         throw new Error('No room found!');
+    }
+
+    public energyInRoom(room: Room): number {
+        const structureEnergy = room.find(FIND_STRUCTURES, {
+            filter: (structure: AnyStructure) => StructureUtils.isHarvestTarget(structure)
+        }).map(s => StructureUtils.getEnergy(s));
+        return structureEnergy.reduce((a,b) => a+b);
+    }
+
+    public energyCapacityInRoom(room: Room): number {
+        const structureEnergyCapacity = room.find(FIND_STRUCTURES, {
+            filter: (structure: AnyStructure) => StructureUtils.isHarvestTarget(structure)
+        }).map(s => StructureUtils.getEnergyCapacity(s));
+        return structureEnergyCapacity.reduce((a,b) => a+b);
     }
 }
 
