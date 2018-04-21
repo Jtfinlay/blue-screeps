@@ -70,6 +70,10 @@ class TaskListClass {
         tasks = tasks.sort((a, b) => a.priority - b.priority);
         for (var i=0; i<tasks.length; i++) {
             let jobless = GameUtils.Creeps.filter(creep => !creep.task);
+            if (jobless.length === 0) {
+                break;
+            }
+
             let creep = tasks[i].chooseCreep(jobless);
             if (creep !== null) {
                 creep.task = tasks[i];

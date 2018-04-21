@@ -26,11 +26,11 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
         const remainingTasks: Task[] = TaskList.process();
 
-        // for (const name in Game.spawns) {
-        //     const spawn = Game.spawns[name];
-        //     if (spawn.energy >= 200 && remainingTasks.filter(t => t.type !== 'deliverenergy').length > 0) {
-        //         spawn.createCreep( [ WORK, CARRY, MOVE], 'Creep'+Game.time);
-        //     }
-        // }
+        for (const name in Game.spawns) {
+            const spawn = Game.spawns[name];
+            if (spawn.energy >= 200 && remainingTasks.filter(t => t.type !== 'deliverenergy').length > 0) {
+                spawn.createCreep( [ WORK, CARRY, MOVE], 'Creep'+Game.time);
+            }
+        }
     });
 });
