@@ -45,19 +45,12 @@ export default class GatherTask implements Task {
         return this.resource;
     }
 
-    public canBePerformedBy(creep: CreepModel): boolean {
-        return creep.carry.energy < creep.carryCapacity;
+    public get targetPosition(): RoomPosition {
+        return this.resource.pos;
     }
 
-    public chooseCreep(creeps: CreepModel[]): CreepModel | null {
-        const sorted = creeps.sort(c => PathFinder.search(c.pos, this.resource.pos).cost);
-        for (let name in sorted) {
-            let creep: CreepModel = sorted[name];
-            if (this.canBePerformedBy(creep)) {
-                return creep;
-            }
-        }
-        return null;
+    public canBePerformedBy(creep: CreepModel): boolean {
+        return creep.carry.energy < creep.carryCapacity;
     }
 
     public perform(creep: CreepModel): boolean {

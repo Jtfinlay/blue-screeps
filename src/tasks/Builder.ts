@@ -36,15 +36,8 @@ export default class BuildTask implements Task {
         return this.constructionSite.id;
     }
 
-    public chooseCreep(creeps: CreepModel[]): CreepModel | null {
-        const sorted = creeps.sort(c => PathFinder.search(c.pos, this.constructionSite.pos).cost);
-        for (let name in sorted) {
-            let creep: CreepModel = sorted[name];
-            if (this.canBePerformedBy(creep)) {
-                return creep;
-            }
-        }
-        return null;
+    public get targetPosition(): RoomPosition {
+        return this.constructionSite.pos;
     }
 
     public canBePerformedBy(creep: CreepModel): boolean {

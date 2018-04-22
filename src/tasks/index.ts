@@ -4,8 +4,9 @@ export interface Task {
     type: TaskType;
     targetId: string;
     priority: number;
+    targetPosition: RoomPosition;
+
     canBePerformedBy(creep: CreepModel): boolean;
-    chooseCreep(creeps: CreepModel[]): CreepModel | null;
     spawnCreep(): BodyPartConstant[] | null;
     perform(creep: CreepModel): boolean;
 }

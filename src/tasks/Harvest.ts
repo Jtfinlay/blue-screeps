@@ -25,25 +25,8 @@ export default class HarvestTask implements Task {
         return this.source;
     }
 
-    public chooseCreep(creeps: CreepModel[]): CreepModel | null {
-        if (creeps.length <= 0) {
-            return null;
-        }
-
-        let efficiencies: number[] = Array.from(new Set(
-            creeps.map(c => HarvestTask.calculateEfficiency(c))
-        )).sort().reverse();
-
-        for (var i=0; i<efficiencies.length; i++) {
-            let eff = efficiencies[i];
-            if (eff <= 0) {
-                continue;
-            }
-            let effCreeps = creeps.filter(c => HarvestTask.calculateEfficiency(c) === eff);
-            let ordered = effCreeps.sort(c => PathFinder.search(c.pos, this.source.pos).cost);
-            return ordered[0];
-        }
-        return null;
+    public get targetPosition(): RoomPosition {
+        return this.source.pos;
     }
 
     public canBePerformedBy(creep: CreepModel): boolean {

@@ -46,8 +46,7 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
             const creepBody = tasks[0].spawnCreep();
             
-            if ((spawn.energy >= 200) && creepBody !== null) {
-                console.log('spawning');
+            if ((RoomUtils.energyInRoom(spawn.room) >= 200) && creepBody !== null) {
                 spawn.createCreep(creepBody, 'Creep'+Game.time);
             }
         }
