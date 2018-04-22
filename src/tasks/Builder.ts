@@ -5,7 +5,7 @@ import GameUtils from 'utils/GameUtils';
 
 export default class BuildTask implements Task {
     private constructionSite: ConstructionSite;
-    private maxWorkers: number = 5;
+    private maxWorkers: number = 4;
 
     public type: TaskType = 'build';
 

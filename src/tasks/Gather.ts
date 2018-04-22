@@ -7,7 +7,7 @@ import profiler from 'screeps-profiler';
 
 export default class GatherTask implements Task {
     private resource: Resource;
-    private maxWorkers: number = 5;
+    private maxWorkers: number = 4;
 
     constructor(resourceId: string) {
         this.resource = GameUtils.getResourceById(resourceId);
@@ -21,7 +21,7 @@ export default class GatherTask implements Task {
         const maxPriority = 100;
 
         // Once we hit 1500 energy in the pile, highest priority.
-        let valuePriority = 100*(this.resource.amount/1500);
+        let valuePriority = 100* (1 - (this.resource.amount/1500));
         valuePriority = Math.min(maxPriority, valuePriority);
         valuePriority = Math.max(minPriority, valuePriority);
 

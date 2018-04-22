@@ -3,10 +3,11 @@ import { Task, DeliverEnergyTaskType, TaskType } from './index';
 import GameUtils from 'utils/GameUtils';
 import StructureUtils, { StructureType } from 'utils/Structure';
 import profiler from 'screeps-profiler';
+import RoomUtils from '../utils/RoomUtils';
 
 export default class DeliverTask implements Task {
     private structure: StructureType;
-    private maxWorkers: number = 5;
+    private maxWorkers: number = 4;
 
     public type: TaskType = 'deliverenergy';
 
@@ -20,7 +21,7 @@ export default class DeliverTask implements Task {
                 return 70;
             case STRUCTURE_SPAWN:
             case STRUCTURE_EXTENSION:
-                return 60;
+                return this.spawnStructurePriority;
             case STRUCTURE_CONTAINER:
                 // todo - figure out priority for each.
                 return 65;
@@ -74,6 +75,19 @@ export default class DeliverTask implements Task {
 
     private totalWorkers(): number {
         return GameUtils.Creeps.filter(c => c.taskTarget === this.type).length;
+    }
+
+    private get spawnStructurePriority(): number {
+        const minPriority = 40;
+        const maxPriority = 100;
+
+        // If there are 10+ high priority jobs, then highest priority
+        const creepsNeeded = RoomUtils.getNumberOfCreepsNeededLastTick(this.structure.room);
+        let valuePriority = 100*(1 - creepsNeeded/20);
+        valuePriority = Math.min(maxPriority, valuePriority);
+        valuePriority = Math.max(minPriority, valuePriority);
+
+        return valuePriority;
     }
 }
 profiler.registerClass(DeliverTask, 'deliverTask');

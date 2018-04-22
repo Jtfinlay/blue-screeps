@@ -28,16 +28,27 @@ export const loop = ErrorMapper.wrapLoop(() => {
 
         for (const name in Game.spawns) {
             const spawn = Game.spawns[name];
-            if (spawn.energy >= 200 && remainingTasks.filter(t => t.type !== 'deliverenergy').length > 0) {
-                const task = remainingTasks.find(t => t.spawnCreep() !== null);
-                if (task === undefined) {
-                    break;
-                }
-                const creepBody = task.spawnCreep();
-                
-                if (creepBody !== null) {
-                    spawn.createCreep(creepBody, 'Creep'+Game.time);
-                }
+
+            const tasks = remainingTasks.filter(t => t.spawnCreep() !== null);
+            RoomUtils.setNumberOfCreepsNeededLastTick(spawn.room, tasks.length);
+            if (tasks.length <= 0) {
+                break;
+            }
+            if (GameUtils.Creeps.find(creep => !creep.task) !== undefined) {
+                RoomUtils.setLastJoblessCreepTick(spawn.room, Game.time);
+                break;
+            }
+
+            if (Game.time - RoomUtils.getLastJoblessCreepTick(spawn.room) < 50) {
+                // recently saw a jobless creep - employment should be good
+                break;
+            }
+
+            const creepBody = tasks[0].spawnCreep();
+            
+            if ((spawn.energy >= 200) && creepBody !== null) {
+                console.log('spawning');
+                spawn.createCreep(creepBody, 'Creep'+Game.time);
             }
         }
     });
