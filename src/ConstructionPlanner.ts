@@ -5,6 +5,7 @@ class ConstructionPlannerClass {
 
     public process(room: Room): void {
         if (Game.time % 100 === 0) {
+            this.planWalls(room);
             this.planExtensions(room);
             this.planContainers(room);
             this.planRoads(room);
@@ -94,6 +95,19 @@ class ConstructionPlannerClass {
                 }
             })
         });
+    }
+
+    private planWalls(room: Room): void {
+        for (let i=2; i<48; i++) {
+            this.buildWall(room, i, 2);
+            this.buildWall(room, i, 47);
+            this.buildWall(room, 2, i);
+            this.buildWall(room, 47, i);
+        }
+    }
+
+    private buildWall(room: Room, x: number, y: number): void {
+        room.createConstructionSite(x, y, STRUCTURE_WALL);
     }
 
     private planRoads(room: Room): void {
