@@ -1,9 +1,11 @@
 import profiler from 'screeps-profiler';
+import PositionUtils from './utils/PositionUtils';
 
 class ConstructionPlannerClass {
 
     public process(room: Room): void {
         if (Game.time % 100 === 0) {
+            this.planExtensions(room);
             this.planContainers(room);
             this.planRoads(room);
         }
@@ -52,6 +54,48 @@ class ConstructionPlannerClass {
         });
     }
 
+    private planExtensions(room: Room): void {
+        const controller = room.controller;
+        if (controller === undefined) {
+            return;
+        }
+
+        // From docs: http://docs.screeps.com/api/#StructureExtension
+        const maxExtensionMap = [0, 0, 5, 10, 20, 30, 40, 50, 60];
+
+        let maxExtensions: number;
+        if (maxExtensionMap.length - 1 < controller.level) {
+            maxExtensions = maxExtensionMap[maxExtensionMap.length - 1];
+        } else {
+            maxExtensions = maxExtensionMap[controller.level];
+        }
+
+        const mineralPos = room.find(FIND_MINERALS).map(mineral => mineral.pos);
+        const sourcePos = room.find(FIND_SOURCES).map(source => source.pos);
+        const spawnPos = room.find(FIND_MY_SPAWNS).map(spawn => spawn.pos);
+
+        let plannedExtensions = 0;
+        sourcePos.forEach(s => {
+            if (plannedExtensions >= maxExtensions) {
+                return;
+            }
+            const positions = [room.getPositionAt(s.x-2, s.y), room.getPositionAt(s.x, s.y-2), 
+                room.getPositionAt(s.x+2, s.y), room.getPositionAt(s.x, s.y+2)];
+            positions.forEach(p => {
+                if (plannedExtensions >= maxExtensions) {
+                    return;
+                }
+                if (p === null) {
+                    return;
+                }
+                if (!PositionUtils.isUnpassable(p) && !PathFinder.search(s, p).incomplete) {
+                    room.createConstructionSite(p.x, p.y, STRUCTURE_EXTENSION);
+                    plannedExtensions++;
+                }
+            })
+        });
+    }
+
     private planRoads(room: Room): void {
         const spawnPos = room.find(FIND_MY_SPAWNS).map(spawn => spawn.pos);
         const sourcePos = room.find(FIND_SOURCES).map(source => source.pos);
@@ -78,6 +122,7 @@ class ConstructionPlannerClass {
         let path = PathFinder.search(source, target).path;
         let iPos = Math.ceil(path.length * fraction);
         let pos = path[iPos];
+        room.createConstructionSite(pos.x, pos.y, STRUCTURE_CONTAINER);
     }
 
 }

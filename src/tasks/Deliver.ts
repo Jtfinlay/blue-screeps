@@ -17,10 +17,13 @@ export default class DeliverTask implements Task {
     public get priority(): number {
         switch (this.structure.structureType) {
             case STRUCTURE_CONTROLLER:
+                return 70;
             case STRUCTURE_SPAWN:
+            case STRUCTURE_EXTENSION:
+                return 60;
             case STRUCTURE_CONTAINER:
                 // todo - figure out priority for each.
-                return 60;
+                return 65;
             default:
                 console.log('unknown priority to assigned for deliverTask of ' + this.structure.structureType);
                 return 60;

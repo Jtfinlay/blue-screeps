@@ -36,7 +36,6 @@ export const loop = ErrorMapper.wrapLoop(() => {
                 const creepBody = task.spawnCreep();
                 
                 if (creepBody !== null) {
-                    console.log('Spawning creep from ' + task.type);
                     spawn.createCreep(creepBody, 'Creep'+Game.time);
                 }
             }
